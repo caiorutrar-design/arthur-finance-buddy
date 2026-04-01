@@ -14,7 +14,203 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      financial_categories: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          organization_id: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          organization_id: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          organization_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_categories_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          direction: string
+          id: string
+          organization_id: string
+          role: string
+          whatsapp_message_id: string | null
+          whatsapp_user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          direction: string
+          id?: string
+          organization_id: string
+          role: string
+          whatsapp_message_id?: string | null
+          whatsapp_user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          direction?: string
+          id?: string
+          organization_id?: string
+          role?: string
+          whatsapp_message_id?: string | null
+          whatsapp_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_whatsapp_user_id_fkey"
+            columns: ["whatsapp_user_id"]
+            isOneToOne: false
+            referencedRelation: "whatsapp_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organizations: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          category_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          organization_id: string
+          transaction_date: string
+          type: string
+          whatsapp_user_id: string
+        }
+        Insert: {
+          amount: number
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          organization_id: string
+          transaction_date?: string
+          type: string
+          whatsapp_user_id: string
+        }
+        Update: {
+          amount?: number
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          organization_id?: string
+          transaction_date?: string
+          type?: string
+          whatsapp_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "financial_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_whatsapp_user_id_fkey"
+            columns: ["whatsapp_user_id"]
+            isOneToOne: false
+            referencedRelation: "whatsapp_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      whatsapp_users: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          organization_id: string
+          phone_number: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          organization_id: string
+          phone_number: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          organization_id?: string
+          phone_number?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_users_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
