@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TrendingUp, TrendingDown, Target, AlertTriangle, CreditCard, ShoppingCart, Utensils, Car, LogOut, User, ArrowLeftRight, List } from "lucide-react";
+import { TrendingUp, TrendingDown, Target, AlertTriangle, CreditCard, ShoppingCart, Utensils, Car, LogOut, List, Menu } from "lucide-react";
 import { ChatPanel } from "@/components/ChatPanel";
 import { FinancialCard } from "@/components/FinancialCard";
 import { CategoryBar } from "@/components/CategoryBar";
@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { SidebarNav, HeaderNav } from "@/components/layout/SidebarNav";
 
 const MOCK_CATEGORIES = [
   { name: "Mercado", icon: ShoppingCart, spent: 1240, limit: 1500, color: "hsl(var(--primary))" },
@@ -80,6 +81,9 @@ const Index = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
+
+          {/* Navigation */}
+          <SidebarNav />
 
           {/* Balance Cards */}
           <div className="grid grid-cols-2 gap-3">

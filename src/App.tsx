@@ -9,6 +9,7 @@ import Index from "./pages/Index.tsx";
 import Login from "./pages/Login.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Transactions from "./pages/Transactions.tsx";
+import Budgets from "./pages/Budgets.tsx";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Transactions />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/budgets"
+              element={
+                <ProtectedRoute>
+                  <Budgets />
                 </ProtectedRoute>
               }
             />
