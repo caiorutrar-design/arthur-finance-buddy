@@ -3,8 +3,9 @@ import { TrendingUp, TrendingDown, Target, AlertTriangle, CreditCard, ShoppingCa
 import { ChatPanel } from "@/components/ChatPanel";
 import { FinancialCard } from "@/components/FinancialCard";
 import { CategoryBar } from "@/components/CategoryBar";
-import { GoalCard } from "@/components/GoalCard";
+import { GoalCard } from "@/components/goals/GoalCard";
 import { useAuth } from "@/hooks/useAuth";
+import { useGoals } from "@/hooks/useGoals";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import {
@@ -29,6 +30,8 @@ const Index = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { profile, signOut } = useAuth();
   const navigate = useNavigate();
+  const { data: goals = [] } = useGoals({ userId: profile?.id, status: 'active' });
+  const activeGoals = goals.filter(g => !g.isCompleted).slice(0, 3);
 
   const handleLogout = async () => {
     await signOut();
@@ -128,20 +131,27 @@ const Index = () => {
           <div>
             <h2 className="font-heading font-semibold text-sm text-foreground mb-3">Metas</h2>
             <div className="space-y-3">
-              <GoalCard
-                title="Viagem Europa"
-                current={8500}
-                target={25000}
-                deadline="Dez 2025"
-                icon={<Target className="h-4 w-4 text-primary" />}
-              />
-              <GoalCard
-                title="Reserva de Emergência"
-                current={12000}
-                target={18000}
-                deadline="Jun 2025"
-                icon={<Target className="h-4 w-4 text-primary" />}
-              />
+              {activeGoals.length > 0 ? (
+                activeGoals.map((goal) => (
+                  <GoalCard
+                    key={goal.id}
+                    goal={goal}
+                    compact
+                    onEdit={() => navigate('/goals')}
+                    onContribute={() => navigate('/goals')}
+                  />
+                ))
+              ) : (
+                <p className="text-xs text-muted-foreground text-center py-2">Nenhuma meta ativa</p>
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full text-xs text-primary"
+                onClick={() => navigate('/goals')}
+              >
+                Ver todas as metas →
+              </Button>
             </div>
           </div>
 
