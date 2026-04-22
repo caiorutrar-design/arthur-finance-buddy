@@ -1,9 +1,19 @@
 import { useState } from "react";
-import { TrendingUp, TrendingDown, Target, AlertTriangle, CreditCard, ShoppingCart, Utensils, Car } from "lucide-react";
+import { TrendingUp, TrendingDown, Target, AlertTriangle, CreditCard, ShoppingCart, Utensils, Car, LogOut, User } from "lucide-react";
 import { ChatPanel } from "@/components/ChatPanel";
 import { FinancialCard } from "@/components/FinancialCard";
 import { CategoryBar } from "@/components/CategoryBar";
 import { GoalCard } from "@/components/GoalCard";
+import { useAuth } from "@/hooks/useAuth";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const MOCK_CATEGORIES = [
   { name: "Mercado", icon: ShoppingCart, spent: 1240, limit: 1500, color: "hsl(var(--primary))" },
@@ -14,6 +24,15 @@ const MOCK_CATEGORIES = [
 
 const Index = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { profile, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+  };
+
+  const userInitials = profile?.name
+    ? profile.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+    : profile?.email?.[0]?.toUpperCase() ?? 'U';
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -24,15 +43,39 @@ const Index = () => {
         } transition-all duration-300 overflow-hidden border-r border-border flex-shrink-0`}
       >
         <div className="w-80 h-full flex flex-col p-4 gap-4 overflow-y-auto">
-          {/* Header */}
+          {/* Header with user info */}
           <div className="flex items-center gap-3 mb-2">
             <div className="h-10 w-10 rounded-xl bg-primary/20 flex items-center justify-center">
               <span className="text-primary font-heading font-bold text-lg">A</span>
             </div>
-            <div>
+            <div className="flex-1 min-w-0">
               <h1 className="font-heading font-bold text-lg text-foreground">Arthur</h1>
               <p className="text-xs text-muted-foreground">Seu consultor financeiro</p>
             </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-2 rounded-lg p-1 hover:bg-accent transition-colors">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="text-xs bg-primary/20 text-primary">
+                      {userInitials}
+                    </AvatarFallback>
+                  </Avatar>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium">{profile?.name || 'Usuário'}</p>
+                    <p className="text-xs text-muted-foreground">{profile?.email}</p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sair
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* Balance Cards */}

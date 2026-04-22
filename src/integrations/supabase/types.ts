@@ -7,30 +7,195 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "14.4"
-  }
   public: {
     Tables: {
-      financial_categories: {
+      users: {
+        Row: {
+          id: string
+          organization_id: string
+          email: string
+          password_hash: string
+          name: string | null
+          avatar_url: string | null
+          telegram_chat_id: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          organization_id: string
+          email: string
+          password_hash: string
+          name?: string | null
+          avatar_url?: string | null
+          telegram_chat_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          organization_id?: string
+          email?: string
+          password_hash?: string
+          name?: string | null
+          avatar_url?: string | null
+          telegram_chat_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organizations: {
         Row: {
           created_at: string
+          id: string
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      whatsapp_users: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          organization_id: string
+          phone_number: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          organization_id: string
+          phone_number: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          organization_id?: string
+          phone_number?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_users_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transactions: {
+        Row: {
+          amount: number
+          category_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          organization_id: string
+          transaction_date: string
+          type: string
+          user_id: string | null
+          whatsapp_user_id: string
+        }
+        Insert: {
+          amount: number
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          organization_id: string
+          transaction_date?: string
+          type: string
+          user_id?: string | null
+          whatsapp_user_id: string
+        }
+        Update: {
+          amount?: number
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          organization_id?: string
+          transaction_date?: string
+          type?: string
+          user_id?: string | null
+          whatsapp_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "financial_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      financial_categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          icon: string | null
           id: string
           name: string
           organization_id: string
           type: string
         }
         Insert: {
+          color?: string | null
           created_at?: string
+          icon?: string | null
           id?: string
           name: string
           organization_id: string
           type: string
         }
         Update: {
+          color?: string | null
           created_at?: string
+          icon?: string | null
           id?: string
           name?: string
           organization_id?: string
@@ -94,119 +259,253 @@ export type Database = {
           },
         ]
       }
-      organizations: {
+      goals: {
         Row: {
+          color: string | null
           created_at: string
+          current_amount: number
+          deadline: string | null
+          icon: string | null
           id: string
           name: string
-          slug: string
-          updated_at: string
+          status: string
+          target_amount: number
+          user_id: string
         }
         Insert: {
+          color?: string | null
           created_at?: string
+          current_amount?: number
+          deadline?: string | null
+          icon?: string | null
           id?: string
           name: string
-          slug: string
-          updated_at?: string
+          status?: string
+          target_amount: number
+          user_id: string
         }
         Update: {
+          color?: string | null
           created_at?: string
+          current_amount?: number
+          deadline?: string | null
+          icon?: string | null
           id?: string
           name?: string
-          slug?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      transactions: {
-        Row: {
-          amount: number
-          category_id: string | null
-          created_at: string
-          description: string | null
-          id: string
-          organization_id: string
-          transaction_date: string
-          type: string
-          whatsapp_user_id: string
-        }
-        Insert: {
-          amount: number
-          category_id?: string | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          organization_id: string
-          transaction_date?: string
-          type: string
-          whatsapp_user_id: string
-        }
-        Update: {
-          amount?: number
-          category_id?: string | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          organization_id?: string
-          transaction_date?: string
-          type?: string
-          whatsapp_user_id?: string
+          status?: string
+          target_amount?: number
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "transactions_category_id_fkey"
+            foreignKeyName: "goals_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      budgets: {
+        Row: {
+          amount_limit: number
+          category_id: string
+          created_at: string
+          end_date: string | null
+          id: string
+          period_type: string
+          start_date: string
+          user_id: string
+        }
+        Insert: {
+          amount_limit: number
+          category_id: string
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          period_type?: string
+          start_date?: string
+          user_id: string
+        }
+        Update: {
+          amount_limit?: number
+          category_id?: string
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          period_type?: string
+          start_date?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budgets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budgets_category_id_fkey"
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "financial_categories"
             referencedColumns: ["id"]
           },
+        ]
+      }
+      chat_conversations: {
+        Row: {
+          created_at: string
+          id: string
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
           {
-            foreignKeyName: "transactions_organization_id_fkey"
-            columns: ["organization_id"]
+            foreignKeyName: "chat_conversations_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "organizations"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "transactions_whatsapp_user_id_fkey"
-            columns: ["whatsapp_user_id"]
-            isOneToOne: false
-            referencedRelation: "whatsapp_users"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
       }
-      whatsapp_users: {
+      chat_messages: {
         Row: {
+          content: string
+          conversation_id: string
           created_at: string
-          display_name: string | null
           id: string
-          organization_id: string
-          phone_number: string
-          updated_at: string
+          metadata: Json | null
+          role: string
+          user_id: string
         }
         Insert: {
+          content: string
+          conversation_id: string
           created_at?: string
-          display_name?: string | null
           id?: string
-          organization_id: string
-          phone_number: string
-          updated_at?: string
+          metadata?: Json | null
+          role: string
+          user_id: string
         }
         Update: {
+          content?: string
+          conversation_id?: string
           created_at?: string
-          display_name?: string | null
           id?: string
-          organization_id?: string
-          phone_number?: string
-          updated_at?: string
+          metadata?: Json | null
+          role?: string
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "whatsapp_users_organization_id_fkey"
-            columns: ["organization_id"]
+            foreignKeyName: "chat_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
             isOneToOne: false
-            referencedRelation: "organizations"
+            referencedRelation: "chat_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_messages_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      alerts: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          metadata: Json | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message: string
+          metadata?: Json | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          metadata?: Json | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alerts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      telegram_connections: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          telegram_chat_id: string
+          telegram_user_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          telegram_chat_id: string
+          telegram_user_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          telegram_chat_id?: string
+          telegram_user_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telegram_connections_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -227,125 +526,30 @@ export type Database = {
   }
 }
 
-type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+type DatabaseWithoutInternals = Omit<Database, "public">
 
 type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
-> = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
-    }
-    ? R
-    : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])
-    ? (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
-        Row: infer R
-      }
-      ? R
-      : never
+  T extends keyof DefaultSchema["Tables"] | { schema: keyof Database }
+> = T extends { schema: keyof Database }
+  ? Database[T]["Tables"][keyof Database[T]["Tables"]]
+  : T extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][T]
     : never
 
 export type TablesInsert<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
-> = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
-    }
-    ? I
-    : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Insert: infer I
-      }
-      ? I
-      : never
+  T extends keyof DefaultSchema["Tables"] | { schema: keyof Database }
+> = T extends { schema: keyof Database }
+  ? Database[T]["Tables"][keyof Database[T]["Tables"]] extends { Insert: infer I } ? I : never
+  : T extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][T] extends { Insert: infer I } ? I : never
     : never
 
 export type TablesUpdate<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
-> = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
-    }
-    ? U
+  T extends keyof DefaultSchema["Tables"] | { schema: keyof Database }
+> = T extends { schema: keyof Database }
+  ? Database[T]["Tables"][keyof Database[T]["Tables"]] extends { Update: infer U } ? U : never
+  : T extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][T] extends { Update: infer U } ? U : never
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Update: infer U
-      }
-      ? U
-      : never
-    : never
-
-export type Enums<
-  DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
-    | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
-> = DefaultSchemaEnumNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
-    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
-    : never
-
-export type CompositeTypes<
-  PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
-> = PublicCompositeTypeNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
-    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never
-
-export const Constants = {
-  public: {
-    Enums: {},
-  },
-} as const
