@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { TrendingUp, TrendingDown, Target, AlertTriangle, CreditCard, ShoppingCart, Utensils, Car, LogOut, User } from "lucide-react";
+import { TrendingUp, TrendingDown, Target, AlertTriangle, CreditCard, ShoppingCart, Utensils, Car, LogOut, User, ArrowLeftRight, List } from "lucide-react";
 import { ChatPanel } from "@/components/ChatPanel";
 import { FinancialCard } from "@/components/FinancialCard";
 import { CategoryBar } from "@/components/CategoryBar";
 import { GoalCard } from "@/components/GoalCard";
 import { useAuth } from "@/hooks/useAuth";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 const MOCK_CATEGORIES = [
   { name: "Mercado", icon: ShoppingCart, spent: 1240, limit: 1500, color: "hsl(var(--primary))" },
@@ -25,6 +27,7 @@ const MOCK_CATEGORIES = [
 const Index = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { profile, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     await signOut();
@@ -136,6 +139,18 @@ const Index = () => {
                 icon={<Target className="h-4 w-4 text-primary" />}
               />
             </div>
+          </div>
+
+          {/* Navigation */}
+          <div className="mt-auto">
+            <Button
+              variant="outline"
+              className="w-full justify-start gap-2"
+              onClick={() => navigate("/transactions")}
+            >
+              <List className="h-4 w-4" />
+              Ver todas transações
+            </Button>
           </div>
         </div>
       </aside>
