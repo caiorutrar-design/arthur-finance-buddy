@@ -510,6 +510,53 @@ export type Database = {
           },
         ]
       }
+      chat_settings: {
+        Row: {
+          created_at: string
+          id: string
+          model: string
+          ollama_base_url: string
+          ollama_model: string
+          provider: string
+          system_prompt: string
+          updated_at: string
+          user_id: string
+          api_key_encrypted: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          model?: string
+          ollama_base_url?: string
+          ollama_model?: string
+          provider?: string
+          system_prompt?: string
+          updated_at?: string
+          user_id: string
+          api_key_encrypted?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          model?: string
+          ollama_base_url?: string
+          ollama_model?: string
+          provider?: string
+          system_prompt?: string
+          updated_at?: string
+          user_id?: string
+          api_key_encrypted?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_settings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

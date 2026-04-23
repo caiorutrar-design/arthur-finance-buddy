@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TrendingUp, TrendingDown, Target, AlertTriangle, CreditCard, ShoppingCart, Utensils, Car, LogOut, List, Menu } from "lucide-react";
-import { ChatPanel } from "@/components/ChatPanel";
+import { ChatContainer } from "@/components/chat/ChatContainer";
 import { FinancialCard } from "@/components/FinancialCard";
 import { CategoryBar } from "@/components/CategoryBar";
 import { GoalCard } from "@/components/goals/GoalCard";
@@ -171,7 +171,11 @@ const Index = () => {
 
       {/* Chat Area */}
       <main className="flex-1 flex flex-col min-w-0">
-        <ChatPanel onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
+        <ChatContainer
+          userId={profile?.id}
+          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+          sidebarOpen={sidebarOpen}
+        />
       </main>
     </div>
   );

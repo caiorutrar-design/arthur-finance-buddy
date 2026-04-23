@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound.tsx";
 import Transactions from "./pages/Transactions.tsx";
 import Budgets from "./pages/Budgets.tsx";
 import Goals from "./pages/Goals.tsx";
+import Chat from "./pages/Chat.tsx";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Goals />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/chat"
+              element={
+                <ProtectedRoute>
+                  <Chat />
                 </ProtectedRoute>
               }
             />
